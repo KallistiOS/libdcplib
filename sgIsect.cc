@@ -17,8 +17,6 @@
      Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
  
      For further information visit http://plib.sourceforge.net
-
-     $Id: sgIsect.cc,v 1.1 2002/02/03 05:32:43 bardtx Exp $
 */
 
 

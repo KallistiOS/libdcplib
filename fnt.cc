@@ -17,8 +17,6 @@
      Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
  
      For further information visit http://plib.sourceforge.net
-
-     $Id: fnt.cc,v 1.4 2002/04/11 07:41:08 bardtx Exp $
 */
 
 // Modified for Dreamcast/KOS by Peter Hatch
