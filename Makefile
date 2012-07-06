@@ -1,9 +1,9 @@
-# 
+#
 # Dreamcast PLIB Derivative makefile by Peter Hatch
 # based on
 # addons/libgl Makefile
 # (c)2001 Dan Potter
-#   
+#
 
 TARGET = libdcplib.a
 OBJS =  ulError.o sg.o fnt.o fntTXF.o
@@ -11,6 +11,11 @@ OBJS =  ulError.o sg.o fnt.o fntTXF.o
 OBJS += sgd.o sgIsect.o
 SUBDIRS =
 
+defaultall: create_kos_link $(OBJS) subdirs linklib
+
 include $(KOS_BASE)/addons/Makefile.prefab
 
-
+# creates the kos link to the headers
+create_kos_link:
+	rm -f ../include/dcplib
+	ln -s ../libdcplib/include ../include/dcplib
