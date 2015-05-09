@@ -1,27 +1,27 @@
 /*
      PLIB - A Suite of Portable Game Libraries
      Copyright (C) 2001  Steve Baker
- 
+
      This library is free software; you can redistribute it and/or
      modify it under the terms of the GNU Library General Public
      License as published by the Free Software Foundation; either
      version 2 of the License, or (at your option) any later version.
- 
+
      This library is distributed in the hope that it will be useful,
      but WITHOUT ANY WARRANTY; without even the implied warranty of
      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
      Library General Public License for more details.
- 
+
      You should have received a copy of the GNU Library General Public
      License along with this library; if not, write to the Free
      Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
- 
+
      For further information visit http://plib.sourceforge.net
 */
 
 // Modified for Dreamcast/KOS by Peter Hatch
 
-#include <dcplib/fnt.h>
+#include "fnt.h"
 
 fntFont::fntFont () {}
 fntFont::~fntFont () {}
@@ -131,7 +131,7 @@ float fntTexFont::low_putch (sgVec3 curpos, float pointsize, float italic, char 
   //ta_commit_vertex (&vert, sizeof (vert) );
   //pvr_list_prim (PVR_LIST_PT_POLY, &vert, sizeof (vert) );  // Not implemented yet
   pvr_prim (&vert, sizeof (vert) );
-  
+
   float ww = (gap + (fixed_pitch ? width : v_right[cc]) ) * pointsize;
   curpos[0] += ww;
   return ww;
@@ -213,7 +213,7 @@ void fntTexFont::getBBox ( const char *s, float pointsize, float italic, float *
 		  else
 			if (cc >= 'a' && cc <= 'z')
 			  cc = cc - 'a' + 'A';
-  
+
 		  if (cc == ' ')
 			{
 			  r += 0.5f;
@@ -271,7 +271,7 @@ void fntTexFont::getBBox ( const char *s, float pointsize, float italic, float *
 void fntTexFont::puts (sgVec3 curpos, float pointsize, float italic, const char *s, float red, float green, float blue, float alpha)
 {
   SGfloat origx = curpos[0];
-	
+
   if (!bound)
     bind_texture (PVR_FILTER_NONE);
 

@@ -1,26 +1,26 @@
 /*
      PLIB - A Suite of Portable Game Libraries
      Copyright (C) 2001  Steve Baker
- 
+
      This library is free software; you can redistribute it and/or
      modify it under the terms of the GNU Library General Public
      License as published by the Free Software Foundation; either
      version 2 of the License, or (at your option) any later version.
- 
+
      This library is distributed in the hope that it will be useful,
      but WITHOUT ANY WARRANTY; without even the implied warranty of
      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
      Library General Public License for more details.
- 
+
      You should have received a copy of the GNU Library General Public
      License along with this library; if not, write to the Free
      Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
- 
+
      For further information visit http://plib.sourceforge.net
 */
 
 
-#include <dcplib/sg.h>
+#include "sg.h"
 
 void sgdVectorProductVec3 ( sgdVec3 dst, const sgdVec3 a, const sgdVec3 b )
 {
@@ -52,13 +52,13 @@ int sgdCompare3DSqdDist( const sgdVec3 v1, const sgdVec3 v2, const SGDfloat sqd_
 void sgdMakeRotMat4( sgdMat4 mat, const SGDfloat angle, const sgdVec3 axis )
 {
   sgdVec3 ax ;
-  sgdNormalizeVec3 ( ax, axis ) ; 
+  sgdNormalizeVec3 ( ax, axis ) ;
 
   SGDfloat temp_angle = angle * SGD_DEGREES_TO_RADIANS ;
   SGDfloat s = sin ( temp_angle ) ;
   SGDfloat c = cos ( temp_angle ) ;
   SGDfloat t = SGD_ONE - c ;
-   
+
   mat[0][0] = t * ax[0] * ax[0] + c ;
   mat[0][1] = t * ax[0] * ax[1] + s * ax[2] ;
   mat[0][2] = t * ax[0] * ax[2] - s * ax[1] ;
@@ -125,7 +125,7 @@ void sgdBox::extend ( const sgdBox *b )
 
 void sgdBox::extend ( const sgdSphere *s )
 {
-  if ( s -> isEmpty () ) 
+  if ( s -> isEmpty () )
     return ;
 
   /*
@@ -178,7 +178,7 @@ int sgdBox::intersects ( const sgdVec4 plane ) const
     The plane intersects the box unless all 8 are positive
     or none of them are positive.
   */
-              
+
   return count != 0 && count != 8 ;
 }
 
@@ -281,7 +281,7 @@ void sgdSphere::extend ( const sgdSphere *s )
     return ;
   }
 
-  /* 
+  /*
     d == The distance between the sphere centers
   */
 
@@ -295,7 +295,7 @@ void sgdSphere::extend ( const sgdSphere *s )
     sgdCopyVec3 ( center, s->getCenter() ) ;
     radius = s->getRadius() ;
     return ;
-  } 
+  }
 
   /*
     Build a new sphere that completely contains the other two:
@@ -358,7 +358,7 @@ void sgdFrustum::update ()
     }
 
     /* Corners of screen relative to eye... */
-  
+
     right = nnear * tan ( hfov * SGD_DEGREES_TO_RADIANS / SGD_TWO ) ;
     top   = nnear * tan ( vfov * SGD_DEGREES_TO_RADIANS / SGD_TWO ) ;
     left  = -right ;
@@ -399,7 +399,7 @@ void sgdFrustum::update ()
   sgdVectorProductVec3 (   bot_plane, v4, v3 ) ;
   sgdVectorProductVec3 (  left_plane, v3, v1 ) ;
 
-  /* 
+  /*
     At this point, you could call
 
       glMatrixMode ( GL_PROJECTION ) ;
@@ -518,7 +518,7 @@ int sgdFrustum::contains ( const sgdSphere *s ) const
   if ( -sp1 >= s->getRadius() || -sp2 >= s->getRadius() ||
        -sp3 >= s->getRadius() || -sp4 >= s->getRadius() )
     return SGD_OUTSIDE ;
-  
+
   /*
     If it's inside by more than the radius then it's *completely* inside
     and we can save time elsewhere if we know that for sure.
@@ -622,7 +622,7 @@ void sgdMakeTransMat4 ( sgdMat4 m, const SGDfloat x, const SGDfloat y, const SGD
 void sgdSetCoord ( sgdCoord *dst, const sgdMat4 src )
 {
   sgdCopyVec3 ( dst->xyz, src[3] ) ;
-    
+
   sgdMat4 mat ;
 
   SGDfloat s = sgdLengthVec3 ( src[0] ) ;
@@ -635,16 +635,16 @@ void sgdSetCoord ( sgdCoord *dst, const sgdMat4 src )
   }
 
   sgdScaleMat4 ( mat, src, SGD_ONE / s ) ;
-    
+
   dst->hpr[1] = asin ( _sgdClampToUnity ( mat[1][2] ) ) ;
 
   SGDfloat cp = cos ( dst->hpr[1] ) ;
-    
+
   /* If pointing nearly vertically up - then heading is ill-defined */
 
   if ( cp > -0.00001 && cp < 0.00001 )
   {
-    SGDfloat cr = _sgdClampToUnity ( mat[0][1] ) ; 
+    SGDfloat cr = _sgdClampToUnity ( mat[0][1] ) ;
     SGDfloat sr = _sgdClampToUnity (-mat[2][1] ) ;
 
     dst->hpr[0] = SGD_ZERO ;
@@ -656,7 +656,7 @@ void sgdSetCoord ( sgdCoord *dst, const sgdMat4 src )
     SGDfloat cr = _sgdClampToUnity (  mat[2][2] / cp ) ;
     SGDfloat sh = _sgdClampToUnity ( -mat[1][0] / cp ) ;
     SGDfloat ch = _sgdClampToUnity (  mat[1][1] / cp ) ;
-  
+
     if ( (sh == SGD_ZERO && ch == SGD_ZERO) || (sr == SGD_ZERO && cr == SGD_ZERO) )
     {
       cr = _sgdClampToUnity ( mat[0][1] ) ;
@@ -737,15 +737,15 @@ void sgdTransposeNegateMat4 ( sgdMat4 dst, const sgdMat4 src )
   dst[1][1] = src[1][1] ;
   dst[2][1] = src[1][2] ;
   dst[3][1] = - sgdScalarProductVec3 ( src[3], src[1] ) ;
-                                                                               
-  dst[0][2] = src[2][0] ;                                                      
-  dst[1][2] = src[2][1] ;                                                      
-  dst[2][2] = src[2][2] ;                                                      
+
+  dst[0][2] = src[2][0] ;
+  dst[1][2] = src[2][1] ;
+  dst[2][2] = src[2][2] ;
   dst[3][2] = - sgdScalarProductVec3 ( src[3], src[2] ) ;
-                                                                               
+
   dst[0][3] = SGD_ZERO ;
-  dst[1][3] = SGD_ZERO ;                                                        
-  dst[2][3] = SGD_ZERO ;                                                        
+  dst[1][3] = SGD_ZERO ;
+  dst[2][3] = SGD_ZERO ;
   dst[3][3] = SGD_ONE  ;
 }
 
@@ -965,7 +965,7 @@ void sgdAngleAxisToQuat ( sgdQuat dst,
                          const SGDfloat angle,
                          const SGDfloat x, const SGDfloat y, const SGDfloat z )
 {
-  sgdVec3 axis ; 
+  sgdVec3 axis ;
   sgdSetVec3 ( axis, x, y, z ) ;
   sgdAngleAxisToQuat ( dst, angle, axis ) ;
 }
@@ -1008,7 +1008,7 @@ void sgdMatrixToQuat( sgdQuat quat, sgdMat4 m )
     quat[SGD_Z] = (m[0][1] - m[1][0]) * s;
   }
   else
-  {		
+  {
     // diagonal is negative
    	i = 0;
     if (m[1][1] > m[0][0]) i = 1;
@@ -1017,7 +1017,7 @@ void sgdMatrixToQuat( sgdQuat quat, sgdMat4 m )
     k = nxt[j];
     s = sqrt ((m[i][i] - (m[j][j] + m[k][k])) + SGD_ONE);
     q[i] = s * SGD_HALF;
-            
+
     if (s != SGD_ZERO) s = SGD_HALF / s;
 
     q[3] = (m[j][k] - m[k][j]) * s;
@@ -1054,7 +1054,7 @@ void sgdMultQuat ( sgdQuat dst, const sgdQuat a, const sgdQuat b )
 }
 
 //from gamasutra.com
-//by nb@netcom.ca 
+//by nb@netcom.ca
 
 void sgdMultQuat2 ( sgdQuat dst, const sgdQuat a, const sgdQuat b )
 {
@@ -1071,13 +1071,13 @@ void sgdMultQuat2 ( sgdQuat dst, const sgdQuat a, const sgdQuat b )
 
 
   dst[SGD_W] =  B + (-E - F + G + H) / SGD_TWO ;
-  dst[SGD_X] =  A - ( E + F + G + H) / SGD_TWO ; 
+  dst[SGD_X] =  A - ( E + F + G + H) / SGD_TWO ;
   dst[SGD_Y] = -C + ( E - F + G - H) / SGD_TWO ;
   dst[SGD_Z] = -D + ( E - F - G + H) / SGD_TWO ;
 }
 
 //from gamasutra.com
-//by nb@netcom.ca 
+//by nb@netcom.ca
 
 void sgdEulerToQuat(sgdQuat quat, sgdVec3 hpr )
 {
@@ -1091,7 +1091,7 @@ void sgdEulerToQuat(sgdQuat quat, sgdVec3 hpr )
   sr = (SGDfloat) sin(hpr[2]*SGD_DEGREES_TO_RADIANS/SGD_TWO);
   sp = (SGDfloat) sin(hpr[1]*SGD_DEGREES_TO_RADIANS/SGD_TWO);
   sy = (SGDfloat) sin(hpr[0]*SGD_DEGREES_TO_RADIANS/SGD_TWO);
-  
+
   cpcy = cp * cy;
   spsy = sp * sy;
 
@@ -1136,9 +1136,9 @@ void sgdQuatToEuler( sgdVec3 hpr, const sgdQuat quat )
   yr = (SGDfloat)atan2(sy,cy);
   hpr[1] = yr * SGD_RADIANS_TO_DEGREES ;
 
-  // AVOID DIVIDE BY ZERO ERROR ONLY WHERE Y= +-90 or +-270 
+  // AVOID DIVIDE BY ZERO ERROR ONLY WHERE Y= +-90 or +-270
   // NOT CHECKING cy BECAUSE OF PRECISION ERRORS
-  if (sy != SGD_ONE && sy != -SGD_ONE)	
+  if (sy != SGD_ONE && sy != -SGD_ONE)
   {
     cx = matrix[2][2] / cy;
     sx = matrix[2][1] / cy;
@@ -1193,7 +1193,7 @@ void sgdQuatToMatrix ( sgdMat4 dst, sgdQuat q )
 
 
 //from gamasutra.com
-//by nb@netcom.ca 
+//by nb@netcom.ca
 
 /************************************
  DEPRECATED - use sgdQuatToMatrix instead.
@@ -1203,7 +1203,7 @@ void sgdMakeRotMat42( sgdMat4 m, sgdQuat quat ){
   SGDfloat wx, wy, wz, xx, yy, yz, xy, xz, zz, x2, y2, z2;
 
   // calculate coefficients
-  x2 = quat[SGD_X] + quat[SGD_X]; y2 = quat[SGD_Y] + quat[SGD_Y]; 
+  x2 = quat[SGD_X] + quat[SGD_X]; y2 = quat[SGD_Y] + quat[SGD_Y];
   z2 = quat[SGD_Z] + quat[SGD_Z];
   xx = quat[SGD_X] * x2;   xy = quat[SGD_X] * y2;   xz = quat[SGD_X] * z2;
   yy = quat[SGD_Y] * y2;   yz = quat[SGD_Y] * z2;   zz = quat[SGD_Z] * z2;
@@ -1211,7 +1211,7 @@ void sgdMakeRotMat42( sgdMat4 m, sgdQuat quat ){
 
   m[0][0] = SGD_ONE- (yy + zz); 	m[0][1] = xy - wz;
   m[0][2] = xz + wy;		m[0][3] = SGD_ZERO ;
- 
+
   m[1][0] = xy + wz;		m[1][1] = SGD_ONE- (xx + zz);
   m[1][2] = yz - wx;		m[1][3] = SGD_ZERO ;
 
@@ -1225,7 +1225,7 @@ void sgdMakeRotMat42( sgdMat4 m, sgdQuat quat ){
 
 
 //from gamasutra.com
-//by nb@netcom.ca 
+//by nb@netcom.ca
 void sgdSlerpQuat2( sgdQuat dst, const sgdQuat from, const sgdQuat to, const SGDfloat t )
 {
 	SGDfloat           to1[4];
@@ -1236,8 +1236,8 @@ void sgdSlerpQuat2( sgdQuat dst, const sgdQuat from, const sgdQuat to, const SGD
 			       + from[SGD_W] * to[SGD_W];
 
         // adjust signs (if necessary)
-        if ( cosom <SGD_ZERO  ){ 
-			cosom = -cosom; 
+        if ( cosom <SGD_ZERO  ){
+			cosom = -cosom;
 			to1[0] = - to[SGD_X];
 		to1[1] = - to[SGD_Y];
 		to1[2] = - to[SGD_Z];
@@ -1250,7 +1250,7 @@ void sgdSlerpQuat2( sgdQuat dst, const sgdQuat from, const sgdQuat to, const SGD
         }
 
         // calculate coefficients
-#define DELTA SGD_ZERO 
+#define DELTA SGD_ZERO
        if ( (SGD_ONE- cosom) > DELTA ) {
                 // standard case (slerp)
                 omega = acos(cosom);
@@ -1258,8 +1258,8 @@ void sgdSlerpQuat2( sgdQuat dst, const sgdQuat from, const sgdQuat to, const SGD
                 scale0 = sin((SGD_ONE- t) * omega) / sinom;
                 scale1 = sin(t * omega) / sinom;
 
-        } else {        
-    // "from" and "to" quaternions are very close 
+        } else {
+    // "from" and "to" quaternions are very close
 	    //  ... so we can do a linear interpolation
                 scale0 = SGD_ONE- t;
                 scale1 = t;
@@ -1277,7 +1277,7 @@ void sgdSlerpQuat( sgdQuat dst, const sgdQuat from, const sgdQuat to, const SGDf
 
   /* SWC - Interpolate between to quaternions */
 
-  co = from[SGD_X] * to[SGD_X] + from[SGD_Y] * to[SGD_Y] + from[SGD_X] * to[SGD_Z] + 
+  co = from[SGD_X] * to[SGD_X] + from[SGD_Y] * to[SGD_Y] + from[SGD_X] * to[SGD_Z] +
 	  from[SGD_W] * to[SGD_W];
 
   if( co < SGD_ZERO )
@@ -1309,15 +1309,13 @@ void sgdSlerpQuat( sgdQuat dst, const sgdQuat from, const sgdQuat to, const SGDf
 }
 
 
- 
+
 void sgdReflectInPlaneVec3 ( sgdVec3 dst, const sgdVec3 src, const sgdVec4 plane )
 {
   SGDfloat src_dot_norm  = sgdScalarProductVec3 ( src, plane ) ;
- 
+
   sgdVec3 tmp ;
 
   sgdScaleVec3 ( tmp, plane, SGD_TWO * src_dot_norm ) ;
   sgdSubVec3 ( dst, src, tmp ) ;
 }
-
-

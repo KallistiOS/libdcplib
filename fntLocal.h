@@ -1,27 +1,27 @@
 /*
      PLIB - A Suite of Portable Game Libraries
      Copyright (C) 2001  Steve Baker
- 
+
      This library is free software; you can redistribute it and/or
      modify it under the terms of the GNU Library General Public
      License as published by the Free Software Foundation; either
      version 2 of the License, or (at your option) any later version.
- 
+
      This library is distributed in the hope that it will be useful,
      but WITHOUT ANY WARRANTY; without even the implied warranty of
      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
      Library General Public License for more details.
- 
+
      You should have received a copy of the GNU Library General Public
      License along with this library; if not, write to the Free
      Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
- 
+
      For further information visit http://plib.sourceforge.net
 */
 
 // Modified for Dreamcast/KOS by Peter Hatch
 
-#include <dcplib/fnt.h>
+#include "fnt.h"
 
 extern int isSwapped;
 extern FILE *curr_image_fd;
@@ -29,7 +29,7 @@ extern FILE *curr_image_fd;
 inline void _fnt_swab_short (unsigned short *x)
 {
   if (isSwapped)
-    *x = ((*x >>  8) & 0x00FF) | 
+    *x = ((*x >>  8) & 0x00FF) |
          ((*x <<  8) & 0xFF00);
 }
 
@@ -37,9 +37,9 @@ inline void _fnt_swab_short (unsigned short *x)
 inline void _fnt_swab_int (unsigned int *x)
 {
   if (isSwapped)
-    *x = ((*x >> 24) & 0x000000FF) | 
-         ((*x >>  8) & 0x0000FF00) | 
-         ((*x <<  8) & 0x00FF0000) | 
+    *x = ((*x >> 24) & 0x000000FF) |
+         ((*x >>  8) & 0x0000FF00) |
+         ((*x <<  8) & 0x00FF0000) |
          ((*x << 24) & 0xFF000000);
 }
 
@@ -51,9 +51,9 @@ inline void _fnt_swab_int_array (int *x, int leng)
 
   for (int i = 0; i < leng; i++)
 	{
-	  *x = ((*x >> 24) & 0x000000FF) | 
-		   ((*x >>  8) & 0x0000FF00) | 
-		   ((*x <<  8) & 0x00FF0000) | 
+	  *x = ((*x >> 24) & 0x000000FF) |
+		   ((*x >>  8) & 0x0000FF00) |
+		   ((*x <<  8) & 0x00FF0000) |
 		   ((*x << 24) & 0xFF000000);
 	  x++;
 	}
@@ -107,5 +107,3 @@ struct TXF_Glyph
   sgVec2 tx3;
   sgVec2 vx3;
 };
-
-

@@ -1,26 +1,26 @@
 /*
      PLIB - A Suite of Portable Game Libraries
      Copyright (C) 2001  Steve Baker
- 
+
      This library is free software; you can redistribute it and/or
      modify it under the terms of the GNU Library General Public
      License as published by the Free Software Foundation; either
      version 2 of the License, or (at your option) any later version.
- 
+
      This library is distributed in the hope that it will be useful,
      but WITHOUT ANY WARRANTY; without even the implied warranty of
      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
      Library General Public License for more details.
- 
+
      You should have received a copy of the GNU Library General Public
      License along with this library; if not, write to the Free
      Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
- 
+
      For further information visit http://plib.sourceforge.net
 */
 
 
-#include <dcplib/sg.h>
+#include "sg.h"
 
 /*
   Determine the origin and unit direction vector of a line
@@ -72,7 +72,7 @@ int sgIsectPlanePlane ( sgVec3 point, sgVec3 dir,
              (plane1[0] * plane2[3] - plane2[0] * plane1[3]) / dir[1] );
       break;
     case 2:
-      sgSetVec3( point, 
+      sgSetVec3( point,
              (plane1[1] * plane2[3] - plane2[1] * plane1[3]) / dir[2],
              (plane2[0] * plane1[3] - plane1[0] * plane2[3]) / dir[2],
              SG_ZERO );
@@ -103,7 +103,7 @@ int sgIsectInfLinePlane( sgVec3 dst, sgVec3 l_org, sgVec3 l_vec, sgVec4 plane )
 
   if ( sgAbs ( tmp ) < FLT_EPSILON )
     return false ;
- 
+
   sgScaleVec3 ( dst, l_vec, -( sgScalarProductVec3 ( l_org, plane )
                                                 + plane[3] ) / tmp ) ;
   sgAddVec3  ( dst, l_org ) ;
@@ -146,14 +146,14 @@ int sgIsectInfLineInfLine( sgVec3 dst,
     sgCopyVec3 ( dst, l2_org ) ;
     return true ;
   }
-  
+
   /*
     Form a plane containing the line A and C,
     and another containing B and C
   */
 
   sgScaleVec3 ( perp, SG_ONE / sgSqrt( dist ) ) ;
- 
+
   sgVec4 pa ;
   sgVec4 pb ;
   sgVec3 tmp ;
@@ -178,7 +178,7 @@ int sgIsectInfLineInfLine( sgVec3 dst,
     sgCopyVec3 ( dst, l2_org ) ;
     return false ;
   }
- 
+
   if ( ! sgIsectInfLinePlane ( dst, l2_org, vec_l2, pa ) )
   {
     sgCopyVec3 ( dst, l2_org ) ;
@@ -221,5 +221,3 @@ SGfloat sgIsectLinesegPlane ( sgVec3 dst, sgVec3 v1, sgVec3 v2, sgVec4 plane )
 
   return s ;
 }
-
-
