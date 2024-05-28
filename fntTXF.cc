@@ -297,7 +297,7 @@ bool fntTexFont::loadTXF (const char *fname)
 
 	  if ( (int)fread (bitmap, 1, bitmapSize, fd) != (int)bitmapSize)
         {
-          delete bitmap;
+          delete[] bitmap;
           ulSetError (UL_WARNING, "fntLoadTXF: Premature EOF in '%s'.", fname);
           return false;
       	}
@@ -305,7 +305,7 @@ bool fntTexFont::loadTXF (const char *fname)
 	  texture = pvr_mem_malloc (2048 + (w * h) / 2);
 	  txr_load_twiddle_vq_bitmap (bitmap, texture, w, h, 0x0000, 0xFFFF);
 
-	  delete bitmap;
+	  delete[] bitmap;
 	}
 	break;
 
