@@ -24,7 +24,9 @@
 #ifndef _FNT_H_
 #define _FNT_H_  1
 
-#include <kos.h>
+#include <cstring>
+#include <cstdio>
+#include <dc/pvr.h>
 #include <assert.h>
 #include "sg.h"
 
