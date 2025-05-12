@@ -22,6 +22,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
+
 #include "ul.h"
 
 static char            _ulErrorBuffer [ 1024 ] = { '\0' } ;
