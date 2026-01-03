@@ -2,7 +2,7 @@
 # Dreamcast PLIB Derivative makefile by Peter Hatch
 # based on
 # addons/libgl Makefile
-# (c)2001 Dan Potter
+# (c)2001 Megan Potter
 #
 
 TARGET = libdcplib.a
@@ -18,5 +18,5 @@ include $(KOS_BASE)/addons/Makefile.prefab
 
 # creates the kos link to the headers
 create_kos_link:
-	rm -f ../include/dcplib
-	ln -s ../libdcplib/include ../include/dcplib
+	rm -f $(KOS_PORTS)/include/dcplib
+	ln -s $(CURDIR)/include $(KOS_PORTS)/include/dcplib
