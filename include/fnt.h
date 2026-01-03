@@ -60,7 +60,7 @@ public:
   virtual void getBBox (const char *s, float pointsize, float italic, float *left, float *right, float *bot, float *top) {}
   virtual void putch (sgVec3 curpos, float pointsize, float italic, char c, float red, float green, float blue, float alpha) {}
   virtual void puts (sgVec3 curpos, float pointsize, float italic, const char *s, float red, float green, float blue, float alpha) {}
-  virtual void begin (int filter_mode) {}
+  virtual void begin (pvr_filter_mode_t filter_mode) {}
   virtual void end () {}
 
   virtual bool load (const char *fname) { return false; }
@@ -123,7 +123,7 @@ private:
   float v_left [FNTMAX_CHAR];
   float v_right[FNTMAX_CHAR];
 
-  void bind_texture (int filter_mode)
+  void bind_texture (pvr_filter_mode_t filter_mode)
 	{
 	  // PSH OPTIMIZE: it would probably make sense to only compile the header once, and store it as a class variable, instead of recalculating it every time.
 
@@ -208,7 +208,7 @@ public:
 
   void getBBox (const char *s, float pointsize, float italic, float *left, float *right, float *bot, float *top);
 
-  void begin (int filter_mode)
+  void begin (pvr_filter_mode_t filter_mode)
 	{
 	  bind_texture (filter_mode);
 	  bound = true;
@@ -243,7 +243,7 @@ class fntRenderer
 
   float red, green, blue, alpha;
 
-  int filter_mode;
+  pvr_filter_mode_t filter_mode;
 
 public:
   fntRenderer () : pointsize (10.0f), italic (0.0f), red (1.0f), green (1.0f), blue (1.0f), alpha (1.0f), filter_mode (PVR_FILTER_NONE)
@@ -326,11 +326,11 @@ public:
 		*a = alpha;
 	}
 
-  int getFilterMode ()
+  pvr_filter_mode_t getFilterMode ()
 	{
 	  return filter_mode;
 	}
-  void setFilterMode (int fm)
+  void setFilterMode (pvr_filter_mode_t fm)
 	{
 	  filter_mode = fm;
 	}
