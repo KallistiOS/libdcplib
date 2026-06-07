@@ -81,10 +81,10 @@ public:
 class fntTexFont : public fntFont
 {
 private:
-  //uint32 texture;
+  //uint32_t texture;
   pvr_ptr_t texture;
-  uint32 tex_width;
-  uint32 tex_height;
+  uint32_t tex_width;
+  uint32_t tex_height;
 
   bool bound;
   bool fixed_pitch;

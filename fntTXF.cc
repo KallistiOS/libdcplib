@@ -44,12 +44,12 @@ int y_twiddle (int y)
 	}
 }
 
-void txr_load_twiddle (void * src, pvr_ptr_t dst, uint32 width, uint32 height)
+void txr_load_twiddle (void * src, pvr_ptr_t dst, uint32_t width, uint32_t height)
 {
   // This only works for square textures.
-  uint32 * xValues = (uint32*)malloc (width * 4);
-  uint16 *srcTexture = (uint16*)src;
-  uint16 *dstTexture = (uint16*)malloc (width * height * 2);
+  uint32_t * xValues = (uint32*)malloc (width * 4);
+  uint16_t *srcTexture = (uint16_t*)src;
+  uint16_t *dstTexture = (uint16_t*)malloc (width * height * 2);
   
   for (int y = 0; y < height; j++)
 	{
@@ -61,7 +61,7 @@ void txr_load_twiddle (void * src, pvr_ptr_t dst, uint32 width, uint32 height)
 }
 */
 
-void twiddle_texture (uint16 * src, uint16 * dst, int& index, uint32 size, uint32 x, uint32 y, uint32 texWidth)
+void twiddle_texture (uint16_t * src, uint16_t * dst, int& index, uint32_t size, uint32_t x, uint32_t y, uint32_t texWidth)
 {
   if (size > 1)
 	{
@@ -77,35 +77,35 @@ void twiddle_texture (uint16 * src, uint16 * dst, int& index, uint32 size, uint3
 	}
 }
 
-void txr_load_twiddle (void * src, pvr_ptr_t dst, uint32 width, uint32 height)
+void txr_load_twiddle (void * src, pvr_ptr_t dst, uint32_t width, uint32_t height)
 {
-  uint16 *twiddledTexture = (uint16*)malloc (width * height * 2);
+  uint16_t *twiddledTexture = (uint16_t*)malloc (width * height * 2);
   int index = 0;
   if (width < height)
 	{
 	  for (int x = 0; x < (int)height; x += width)
 		{
-		  twiddle_texture ((uint16*)src, twiddledTexture, index, width, x, 0, width);
+		  twiddle_texture ((uint16_t*)src, twiddledTexture, index, width, x, 0, width);
 		}
 	}
   else
 	{
 	  for (int y = 0; y < (int)width; y += height)
 		{
-		  twiddle_texture ((uint16*)src, twiddledTexture, index, height, 0, y, width);
+		  twiddle_texture ((uint16_t*)src, twiddledTexture, index, height, 0, y, width);
 		}
 	}
-  //twiddle_texture ((uint16*)src, twiddledTexture, index, width, 0, 0, width);
+  //twiddle_texture ((uint16_t*)src, twiddledTexture, index, width, 0, 0, width);
   pvr_txr_load (twiddledTexture, dst, width * height * 2);
   free (twiddledTexture);
 }
 
-void txr_load_vq_bitmap (void * src, pvr_ptr_t dst, uint32 width, uint32 height, uint16 color0, uint16 color1)
+void txr_load_vq_bitmap (void * src, pvr_ptr_t dst, uint32_t width, uint32_t height, uint16_t color0, uint16_t color1)
 {
   int textureSize = 2048 + (width * height) / 2;
-  uint8 *texture = new uint8[textureSize];
+  uint8_t *texture = new uint8_t[textureSize];
   memset (texture, 0x00, textureSize);
-  uint16 *codebook = (uint16*)texture;
+  uint16_t *codebook = (uint16_t*)texture;
 
   // Initialize the codebook
   for (int i = 0; i < 16; i++)
@@ -116,14 +116,14 @@ void txr_load_vq_bitmap (void * src, pvr_ptr_t dst, uint32 width, uint32 height,
 	  codebook[i * 4 + 3] = (i & 8) ? color1 : color0;
 	}
   // Initialize the indices into codebook
-  uint8 *bitmap = (uint8*)src;
+  uint8_t *bitmap = (uint8_t*)src;
   // This won't work if width isn't evenly divisible by 8.
-  uint32 stride = width / 8;
+  uint32_t stride = width / 8;
   for (int i = 0; i < (int)height; i++)
 	{
 	  for (int j = 0; j < (int)stride; ++j)
 		{
-		  uint8 bitmapValue = bitmap[i * stride + j];
+		  uint8_t bitmapValue = bitmap[i * stride + j];
 		  texture[2048 + ((i * stride + j) * 2)    ] = bitmapValue & 0x0F;
 		  texture[2048 + ((i * stride + j) * 2) + 1] = (bitmapValue & 0xF0) >> 4;
 		}
@@ -132,7 +132,7 @@ void txr_load_vq_bitmap (void * src, pvr_ptr_t dst, uint32 width, uint32 height,
   delete[] texture;
 }
 
-void twiddle_bitmap_texture (uint8 * src, uint8 * dst, int& index, uint32 size, uint32 x, uint32 y, uint32 texWidth)
+void twiddle_bitmap_texture (uint8_t * src, uint8_t * dst, int& index, uint32_t size, uint32_t x, uint32_t y, uint32_t texWidth)
 {
   if (size > 1)
 	{
@@ -152,26 +152,26 @@ void twiddle_bitmap_texture (uint8 * src, uint8 * dst, int& index, uint32 size, 
 	}
 }
 
-void txr_load_twiddle_vq_bitmap (void * src, pvr_ptr_t dst, uint32 width, uint32 height, uint16 color0, uint16 color1)
+void txr_load_twiddle_vq_bitmap (void * src, pvr_ptr_t dst, uint32_t width, uint32_t height, uint16_t color0, uint16_t color1)
 {
-  uint8 *twiddledTexture = (uint8*)malloc (width * height / 4);
+  uint8_t *twiddledTexture = (uint8_t*)malloc (width * height / 4);
   memset (twiddledTexture, 0, width * height / 4);
   int index = 0;
   if (width < height)
 	{
 	  for (int x = 0; x < (int)height; x += width)
 		{
-		  twiddle_bitmap_texture ((uint8*)src, twiddledTexture, index, width, x, 0, width);
+		  twiddle_bitmap_texture ((uint8_t*)src, twiddledTexture, index, width, x, 0, width);
 		}
 	}
   else
 	{
 	  for (int y = 0; y < (int)width; y += height)
 		{
-		  twiddle_bitmap_texture ((uint8*)src, twiddledTexture, index, height, 0, y, width);
+		  twiddle_bitmap_texture ((uint8_t*)src, twiddledTexture, index, height, 0, y, width);
 		}
 	}
-  //twiddle_bitmap_texture ((uint8*)src, twiddledTexture, index, width, 0, 0, width);
+  //twiddle_bitmap_texture ((uint8_t*)src, twiddledTexture, index, width, 0, 0, width);
   txr_load_vq_bitmap (twiddledTexture, dst, width, height, color0, color1);
   free (twiddledTexture);
 }
@@ -275,11 +275,11 @@ bool fntTexFont::loadTXF (const char *fname)
           return false;
         }
 
-	  teximage = new uint8 [ntexels * 2];
+	  teximage = new uint8_t [ntexels * 2];
 
 	  for (int i = 0; i < ntexels; i++)
         {
-		  uint8 argb = orig [i] >> 4;
+		  uint8_t argb = orig [i] >> 4;
 		  argb = argb + (argb << 4);
           teximage [i * 2] = argb;
           teximage [i * 2 + 1] = argb;
@@ -292,8 +292,8 @@ bool fntTexFont::loadTXF (const char *fname)
    
     case FNT_BITMAP_FORMAT:
 	{
-	  uint32 bitmapSize = w * h / 8;
-	  uint8 *bitmap = new uint8[bitmapSize];
+	  uint32_t bitmapSize = w * h / 8;
+	  uint8_t *bitmap = new uint8_t[bitmapSize];
 
 	  if ( (int)fread (bitmap, 1, bitmapSize, fd) != (int)bitmapSize)
         {
